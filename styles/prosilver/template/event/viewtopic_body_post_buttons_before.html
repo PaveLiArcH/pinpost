@@ -1,0 +1,9 @@
+<!-- IF not postrow.S_FIRST_POST and postrow.S_AUTH -->
+<li>
+	<!-- IF postrow.POST_ID == postrow.BESTANSWER_ID -->
+	<a href="{postrow.U_UNMARK_ANSWER}" title="{L_UNMARK_ANSWER}" class="unmark-answer-button icon-unmark-answer-button"><span>&#10007; {L_BUTTON_UNMARK_ANSWER}</span></a>
+	<!-- ELSE -->
+	<a href="{postrow.U_MARK_ANSWER}" title="{L_MARK_ANSWER}" class="button icon-mark-answer-button"><span>&#10003; {L_BUTTON_MARK_ANSWER}</span></a>
+	<!-- ENDIF -->
+</li>
+<!-- ENDIF -->

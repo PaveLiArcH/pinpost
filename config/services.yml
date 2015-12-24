@@ -1,0 +1,24 @@
+services:
+    kinerity.bestanswer.listener:
+        class: kinerity\bestanswer\event\listener
+        arguments:
+            - @auth
+            - @dbal.conn
+            - @controller.helper
+            - @request
+            - @template
+            - @user
+            - %core.root_path%
+            - %core.php_ext%
+        tags:
+            - { name: event.listener }
+
+    kinerity.bestanswer.main.controller:
+        class: kinerity\bestanswer\controller\main_controller
+        arguments:
+            - @auth
+            - @dbal.conn
+            - @request
+            - @user
+            - %core.root_path%
+            - %core.php_ext%
