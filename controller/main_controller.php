@@ -103,16 +103,14 @@ class main_controller
 				{
 					if ($action == 'unmark_answer')
 					{
-						$sql_data = array(
-							'bestanswer_id' => 0,
-						);
-						$sql = 'UPDATE ' . TOPICS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_data) . ' WHERE topic_id = ' . $data['topic_id'];
+						$sql = 'UPDATE ' . TOPICS_TABLE . '
+							SET bestanswer_id = 0
+							WHERE topic_id = ' . $data['topic_id'];
 						$this->db->sql_query($sql);
 
-						$sql_data = array(
-							'user_answers' => $data['user_answers'] - 1,
-						);
-						$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_data) . ' WHERE user_id = ' . $data['user_id'];
+						$sql = 'UPDATE ' . USERS_TABLE . '
+							SET user_answers = user_answers - 1
+							WHERE user_id = ' . $data['user_id'];
 						$this->db->sql_query($sql);
 					}
 
@@ -140,24 +138,21 @@ class main_controller
 
 						if ($row['bestanswer_id'])
 						{
-							$sql_data = array(
-								'user_answers' => $row['user_answers'] - 1,
-							);
-							$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_data) . ' WHERE user_id = ' . $row['user_id'];
+							$sql = 'UPDATE ' . USERS_TABLE . '
+								SET user_answers = user_answers - 1
+								WHERE user_id = ' . $row['user_id'];
 							$this->db->sql_query($sql);
 						}
 
 						// Now, update everything
-						$sql_data = array(
-							'bestanswer_id' => (int) $post_id,
-						);
-						$sql = 'UPDATE ' . TOPICS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_data) . ' WHERE topic_id = ' . $data['topic_id'];
+						$sql = 'UPDATE ' . TOPICS_TABLE . '
+							SET bestanswer_id = ' . (int) $post_id . '
+							WHERE topic_id = ' . $data['topic_id'];
 						$this->db->sql_query($sql);
 
-						$sql_data = array(
-							'user_answers' => $data['user_answers'] + 1,
-						);
-						$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_data) . ' WHERE user_id = ' . $data['user_id'];
+						$sql = 'UPDATE ' . USERS_TABLE . '
+							SET user_answers = user_answers + 1
+							WHERE user_id = ' . $data['user_id'];
 						$this->db->sql_query($sql);
 					}
 				}
