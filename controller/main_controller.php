@@ -59,7 +59,7 @@ class main_controller
 		$post_id = $this->request->variable('p', 0);
 
 		$sql_array = array(
-			'SELECT'	=> 'f.forum_id, f.enable_bestanswer, p.post_id, p.topic_id, p.poster_id, t.topic_id, t.topic_first_post_id, t.topic_poster, u.user_id, u.user_answers',
+			'SELECT'	=> 't.*, f.*, p.*, u.user_id',
 
 			'FROM'		=> array(
 				FORUMS_TABLE	=> 'f',
@@ -68,28 +68,24 @@ class main_controller
 				USERS_TABLE		=> 'u',
 			),
 
-			'WHERE'		=> 'p.post_id = ' . (int) $post_id . '
-								AND p.topic_id = t.topic_id
-								AND p.poster_id = u.user_id
-								AND t.forum_id = f.forum_id',
+			'WHERE'		=> "p.post_id = $post_id AND t.topic_id = p.topic_id AND p.poster_id = u.user_id AND f.forum_id = t.forum_id",
 		);
-		$sql = $this->db->sql_build_query('SELECT', $sql_array);
 
-		// Run the built query
+		$sql = $this->db->sql_build_query('SELECT', $sql_array);
 		$result = $this->db->sql_query($sql);
-		$data = $this->db->sql_fetchrow($result);
+		$topic_data = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
 
 		// Validate all checks and throw errors
-		if (!$data['enable_bestanswer'])
+		if (!$topic_data['enable_bestanswer'])
 		{
 			throw new \phpbb\exception\http_exception(404, $this->user->lang('EXTENSION_NOT_ENABLED'));
 		}
-		if ($data['topic_first_post_id'] == (int) $post_id)
+		if ($topic_data['topic_first_post_id'] == (int) $post_id)
 		{
 			throw new \phpbb\exception\http_exception(404, $this->user->lang('TOPIC_FIRST_POST'));
 		}
-		if (!$this->auth->acl_get('m_mark_bestanswer', $data['forum_id']) && (!$this->auth->acl_get('f_mark_bestanswer', $data['forum_id']) && $data['topic_poster'] != $this->user->data['user_id']))
+		if (!$this->auth->acl_get('m_mark_bestanswer', $topic_data['forum_id']) && (!$this->auth->acl_get('f_mark_bestanswer', $topic_data['forum_id']) && $topic_data['topic_poster'] != $this->user->data['user_id']))
 		{
 			throw new \phpbb\exception\http_exception(403, $this->user->lang('NOT_AUTHORISED'));
 		}
@@ -105,54 +101,41 @@ class main_controller
 					{
 						$sql = 'UPDATE ' . TOPICS_TABLE . '
 							SET bestanswer_id = 0
-							WHERE topic_id = ' . $data['topic_id'];
+							WHERE topic_id = ' . $topic_data['topic_id'];
 						$this->db->sql_query($sql);
 
 						$sql = 'UPDATE ' . USERS_TABLE . '
 							SET user_answers = user_answers - 1
-							WHERE user_id = ' . $data['user_id'];
+							WHERE user_id = ' . $topic_data['user_id'];
 						$this->db->sql_query($sql);
 					}
 
 					if ($action == 'mark_answer')
 					{
-						$sql_array = array(
-							'SELECT'	=> 'p.post_id, p.topic_id, p.poster_id, t.topic_id, t.bestanswer_id, u.user_id, u.user_answers',
-
-							'FROM'		=> array(
-								POSTS_TABLE		=> 'p',
-								TOPICS_TABLE	=> 't',
-								USERS_TABLE		=> 'u',
-							),
-
-							'WHERE'		=> 'p.post_id = t.bestanswer_id
-												AND p.topic_id = t.topic_id
-												AND p.poster_id = u.user_id',
-						);
-						$sql = $this->db->sql_build_query('SELECT', $sql_array);
-
-						// Run the built query
-						$result = $this->db->sql_query($sql);
-						$row = $this->db->sql_fetchrow($result);
-						$this->db->sql_freeresult($result);
-
-						if ($row['bestanswer_id'])
+						if ($topic_data['bestanswer_id'])
 						{
+							$sql = 'SELECT poster_id
+								FROM ' . POSTS_TABLE . '
+								WHERE post_id = ' . $topic_data['bestanswer_id'];
+							$result = $this->db->sql_query($sql);
+							$row = $this->db->sql_fetchrow($result);
+							$this->db->sql_freeresult($result);
+								
 							$sql = 'UPDATE ' . USERS_TABLE . '
 								SET user_answers = user_answers - 1
-								WHERE user_id = ' . $row['user_id'];
+								WHERE user_id = ' . $row['poster_id'];
 							$this->db->sql_query($sql);
 						}
 
 						// Now, update everything
 						$sql = 'UPDATE ' . TOPICS_TABLE . '
 							SET bestanswer_id = ' . (int) $post_id . '
-							WHERE topic_id = ' . $data['topic_id'];
+							WHERE topic_id = ' . $topic_data['topic_id'];
 						$this->db->sql_query($sql);
 
 						$sql = 'UPDATE ' . USERS_TABLE . '
 							SET user_answers = user_answers + 1
-							WHERE user_id = ' . $data['user_id'];
+							WHERE user_id = ' . $topic_data['user_id'];
 						$this->db->sql_query($sql);
 					}
 				}
