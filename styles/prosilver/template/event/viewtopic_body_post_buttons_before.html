@@ -1,9 +1,11 @@
-<!-- IF not postrow.S_FIRST_POST and postrow.S_AUTH -->
+<!-- IF postrow.S_PIN_AVAILABLE -->
 <li>
-	<!-- IF postrow.POST_ID == postrow.BESTANSWER_ID -->
-	<a href="{postrow.U_UNMARK_ANSWER}" title="{L_UNMARK_ANSWER}" class="unmark-answer-button icon-unmark-answer-button"><span>&#10007; {L_BUTTON_UNMARK_ANSWER}</span></a>
-	<!-- ELSE -->
-	<a href="{postrow.U_MARK_ANSWER}" title="{L_MARK_ANSWER}" class="button icon-mark-answer-button"><span>&#10003; {L_BUTTON_MARK_ANSWER}</span></a>
-	<!-- ENDIF -->
+    <!-- IF postrow.POST_PIN -->
+    <a href="{postrow.U_UNPIN_POST}" title="{L_UNPIN_POST}" class="button button-icon-only unpin-post-button"><i
+            class="icon fa-thumb-tack fa-fw" aria-hidden="true"></i></a>
+    <!-- ELSE -->
+    <a href="{postrow.U_PIN_POST}" title="{L_PIN_POST}" class="button button-icon-only unpin-post-button"><i
+            class="icon fa-thumb-tack fa-fw" aria-hidden="true"></i></a>
+    <!-- ENDIF -->
 </li>
 <!-- ENDIF -->

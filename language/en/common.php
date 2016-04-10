@@ -1,24 +1,22 @@
 <?php
 /**
-*
-* Extension - Best Answer
-*
-* @copyright (c) 2015 kinerity <http://www.acsyste.com>
-* @license GNU General Public License, version 2 (GPL-2.0)
-*
-*/
+ *
+ * Extension - Pin Post
+ *
+ * @copyright (c) 2015 kinerity <http://www.acsyste.com>
+ * @license       GNU General Public License, version 2 (GPL-2.0)
+ *
+ */
 
 /**
-* DO NOT CHANGE
-*/
-if (!defined('IN_PHPBB'))
-{
-	exit;
+ * DO NOT CHANGE
+ */
+if (!defined('IN_PHPBB')) {
+    exit;
 }
 
-if (empty($lang) || !is_array($lang))
-{
-	$lang = array();
+if (empty($lang) || !is_array($lang)) {
+    $lang = array();
 }
 
 // DEVELOPERS PLEASE NOTE
@@ -37,27 +35,26 @@ if (empty($lang) || !is_array($lang))
 // ’ » “ ” …
 //
 
-$lang = array_merge($lang, array(
-	'ANSWERED'	=> 'ANSWERED',
+$lang = array_merge(
+    $lang,
+    array(
+        'PINNED' => 'PINNED',
 
-	'BEST_ANSWER'	=> 'BEST ANSWER',
-	'BUTTON_MARK_ANSWER'	=> 'Mark Answer',
-	'BUTTON_UNMARK_ANSWER'	=> 'Unmark Answer',
+        'BUTTON_PIN_POST'   => 'Pin Post',
+        'BUTTON_UNPIN_POST' => 'Unpin Post',
 
-	'ENABLE_BESTANSWER'			=> 'Enable "Best Answer" feature',
-	'ENABLE_BESTANSWER_EXPLAIN'	=> 'If enabled, the topic starter (if permitted) and moderators (where allowed) will be able to mark a topic reply as the "best answer".',
-	'EXTENSION_NOT_ENABLED'		=> 'The Best Answer extension is not enabled on this forum.',
+        'ENABLE_PINPOST'         => 'Enable "Pin Post" feature',
+        'ENABLE_PINPOST_EXPLAIN' => 'If enabled, the topic starter (if permitted) and moderators (where allowed) will be able to pin posts in topic.',
+        'EXTENSION_NOT_ENABLED'  => 'The Pin Post extension is not enabled on this forum.',
 
-	'FULL_POST'	=> 'GO TO FULL POST',
+        'FULL_POST' => 'GO TO FULL POST',
 
-	'INVALID_FILTER'	=> 'The filter parameter is invalid. Please verify this variable is correct.',
+        'INVALID_FILTER' => 'The filter parameter is invalid. Please verify this variable is correct.',
 
-	'MARK_ANSWER'			=> 'Mark post as best answer',
-	'MARK_ANSWER_CONFIRM'	=> 'Are you sure you want to mark this post as the best answer?',
+        'PIN_POST'         => 'Pin post',
+        'PIN_POST_CONFIRM' => 'Are you sure you want to pin this post?',
 
-	'TOPIC_FIRST_POST'	=> 'You cannot mark this post as the best answer as it is the first post of the topic.',
-	'TOPICS_ANSWERED'	=> 'Topics answered',
-
-	'UNMARK_ANSWER'			=> 'Unmark post as best answer',
-	'UNMARK_ANSWER_CONFIRM'	=> 'Are you sure you want to unmark this post as the best answer?',
-));
+        'UNPIN_POST'         => 'Unpin post',
+        'UNPIN_POST_CONFIRM' => 'Are you sure you want to unpin this post?',
+    )
+);

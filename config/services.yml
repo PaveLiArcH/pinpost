@@ -1,6 +1,6 @@
 services:
-    kinerity.bestanswer.listener:
-        class: kinerity\bestanswer\event\listener
+    ruranobe.pinpost.listener:
+        class: ruranobe\pinpost\event\listener
         arguments:
             - @auth
             - @dbal.conn
@@ -13,8 +13,8 @@ services:
         tags:
             - { name: event.listener }
 
-    kinerity.bestanswer.main.controller:
-        class: kinerity\bestanswer\controller\main_controller
+    ruranobe.pinpost.main.controller:
+        class: ruranobe\pinpost\controller\main_controller
         arguments:
             - @auth
             - @dbal.conn
